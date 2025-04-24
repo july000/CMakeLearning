@@ -1,3 +1,4 @@
+# Lesson 1
 ## c/c++ 为什么需要头文件
 * 头文件存在主要的意义，就是在预编译阶段，被展开到源文件中
 ### 头文件的作用
@@ -140,4 +141,35 @@ CMake Tools 扩展会监控 CMakeLists.txt 文件的变化。
 ![file_encoding](./doc/images/vscode_file_encoding.jpg)
 
 
- 
+# Lesson 2 Static Libraray and Dynamic Library
+## 静态库与动态库的区别
+静态库是一个完整的库，不需要再加载其他的东西，可以直接调用     
+动态库是在程序运行时，遇到某些函数时，需要调用的       
+
+## 如何制作一个静态库
+### 生成静态库
+在lesson2_1中写一个加法的函数， 把这个加法函数做成一个静态库               
+使用**add_library(target source)**语法制作静态库，然后直接编译就会生成静态库   
+![add_static](./doc/images/add_static.jpg)
+### 调用静态库
+在main函数中调用，先把上一步生成的静态库复制到lesson2_1这个文件夹下，方便查找或调用     
+在写main.cpp文件同级的CMakeLists这个文件内容是，添加静态库的方式错误
+![add_executable_error](./doc/images/add_executable_error.jpg)
+![add_static_to_exec](./doc/images/add_static_to_exec.jpg)
+把**add_executable**中的静态库删除，编译报错，是因为main.cpp中调用add函数没有找到定义，这个定义是在静态库中的，这个静态库没有被包含(链接)进来
+![no_static_lib](./doc/images/no_static_lib.jpg)
+![no_statc_lib_build_error](./doc/images/no_statc_lib_build_error.jpg)
+有以下几种方式可以进行链接      
+1. link_libraries(static_lib)
+![link_libraries](./doc/images/link_libraries.jpg)
+这种方式不能写链接库的后缀，否则会报下面的错误，无法打开文件
+![link_error_with_lib](./doc/images/link_error_with_lib.jpg)
+2. target_link_libraries(target static_lib)     
+同样也不能写静态库的后缀，否则也是会报找不到文件的错误
+![target_link_libraries](./doc/images/target_link_libraries.jpg)
+3. link_directories(lib_dir)        
+这个命令需要结合**target_link_libraries**这个命令使用，这样就在**target_link_libraries**就可加可不加后缀都可以
+![link_directories](./doc/images/link_directories.jpg)
+## 如何制作一个动态库
+
+
