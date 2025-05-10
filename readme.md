@@ -149,14 +149,14 @@ CMake Tools 扩展会监控 CMakeLists.txt 文件的变化。
 ## 如何制作一个静态库
 ### 生成静态库
 在lesson2_1中写一个加法的函数， 把这个加法函数做成一个静态库               
-使用**add_library(target source)**语法制作静态库，然后直接编译就会生成静态库   
+使用 **add_library(target source)** 语法制作静态库，然后直接编译就会生成静态库   
 ![add_static](./doc/images/add_static.jpg)
 ### 调用静态库
 在main函数中调用，先把上一步生成的静态库复制到lesson2_1这个文件夹下，方便查找或调用     
 在写main.cpp文件同级的CMakeLists这个文件内容是，添加静态库的方式错误
 ![add_executable_error](./doc/images/add_executable_error.jpg)
 ![add_static_to_exec](./doc/images/add_static_to_exec.jpg)
-把**add_executable**中的静态库删除，编译报错，是因为main.cpp中调用add函数没有找到定义，这个定义是在静态库中的，这个静态库没有被包含(链接)进来
+把 **add_executable** 中的静态库删除，编译报错，是因为main.cpp中调用add函数没有找到定义，这个定义是在静态库中的，这个静态库没有被包含(链接)进来
 ![no_static_lib](./doc/images/no_static_lib.jpg)
 ![no_statc_lib_build_error](./doc/images/no_statc_lib_build_error.jpg)
 有以下几种方式可以进行链接      
@@ -168,8 +168,22 @@ CMake Tools 扩展会监控 CMakeLists.txt 文件的变化。
 同样也不能写静态库的后缀，否则也是会报找不到文件的错误
 ![target_link_libraries](./doc/images/target_link_libraries.jpg)
 3. link_directories(lib_dir)        
-这个命令需要结合**target_link_libraries**这个命令使用，这样就在**target_link_libraries**就可加可不加后缀都可以
+这个命令需要结合 **target_link_libraries** 这个命令使用，这样就在 **target_link_libraries** 就可加可不加后缀都可以
 ![link_directories](./doc/images/link_directories.jpg)
+
 ## 如何制作一个动态库
+### 生成一个动态库
+在lesson2_2中写一个加法的函数， 把这个加法函数做成一个动态库               
+使用 **add_library(target SHARED source)** 语法制作动态库，然后直接编译就会生成动态库   
+![add_shared](./doc/images/add_shared.jpg)
+### 调用动态库(Win + VS)
+按照静态库的方式进行调用，复制上一步生成的动态库到lesson2_2文件夹下的bin文件夹下，并把用到的头文件也复制到bin文件夹下面     
+在add.cpp中的函数实现前面不加关键字时，只会生成dll文件，没有lib文件，并且会报错     
+![add_func](./doc/images/add_func.jpg)
+![add_shared_error](./doc/images/add_shared_error.jpg)
 
-
+解决上面的问题，需要在add函数的实现前面加上关键字 **__declspec(dllexport)**
+出现下面这个问题        
+![add_redefine](./doc/images/add_redefine.jpg)
+但是把add.cpp中的include注释掉，就没有这个重定义的错误      
+![/__declspec](./doc/images/__declspec.jpg)
