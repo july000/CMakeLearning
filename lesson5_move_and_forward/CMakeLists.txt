@@ -1,0 +1,1 @@
+add_executable(lesson5_lv_rv lvalue_and_rvalue.cpp)
